@@ -1,1 +1,7 @@
 CREATE SCHEMA IF NOT EXISTS musicbrainz;
+DROP TABLE IF EXISTS release;
+DROP TABLE IF EXISTS release_group;
+DROP TABLE IF EXISTS release_country;
+DROP TABLE IF EXISTS artist;
+DROP TABLE IF EXISTS area;
+

@@ -13,4 +13,4 @@ This is a quick and rough hack. No support will be provided.
 * `cd musicbrainz-data`
 * `docker-compose up -d`
 * Load the data: `cat preamble.sql <path to dump> postamble.sql | grep -v "musicbrainz_unaccent" | grep -v mb_simple | grep -v COLLATE | grep -v "CREATE TRIGGER" | grep -v "CREATE CONSTRAINT" | docker-compose exec -T db psql -U postgres -v ON_ERROR_STOP=1`
-* Get a shell: `docker-compose exec psql -U postgres`
+* Get a shell: `docker-compose exec db psql -U postgres`
