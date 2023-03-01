@@ -33,3 +33,102 @@ FROM
   INNER JOIN artist ON release.artist_credit = artist.id
 WHERE date_month = 3 AND date_day = 1;
 ```
+
+## ChatGPT prompt
+
+Use at your own risk etc.
+
+I've left out some of the columns.
+
+```
+For a Postgres database with the following tables:
+
+                                          Table "public.area"
+      Column      |           Type           | Collation | Nullable |             Default
+------------------+--------------------------+-----------+----------+----------------------------------
+ id               | integer                  |           | not null | nextval('area_id_seq'::regclass)
+ gid              | uuid                     |           | not null |
+ name             | character varying        |           | not null |
+ type             | integer                  |           |          |
+ edits_pending    | integer                  |           | not null | 0
+ last_updated     | timestamp with time zone |           |          | now()
+ begin_date_year  | smallint                 |           |          |
+ begin_date_month | smallint                 |           |          |
+ begin_date_day   | smallint                 |           |          |
+ end_date_year    | smallint                 |           |          |
+ end_date_month   | smallint                 |           |          |
+ end_date_day     | smallint                 |           |          |
+ ended            | boolean                  |           | not null | false
+ comment          | character varying(255)   |           | not null | ''::character varying
+Indexes:
+    "area_pkey" PRIMARY KEY, btree (id)
+    "area_idx_gid" UNIQUE, btree (gid)
+    "area_idx_name" btree (name)
+Check constraints:
+    "area_check" CHECK ((end_date_year IS NOT NULL OR end_date_month IS NOT NULL OR end_date_day IS NOT NULL) AND ended = true OR end_date_year IS NULL AND end_date_month IS NULL AND end_date_day IS NULL)
+    "area_edits_pending_check" CHECK (edits_pending >= 0)
+
+                                          Table "public.artist"
+      Column      |           Type           | Collation | Nullable |              Default
+------------------+--------------------------+-----------+----------+------------------------------------
+ id               | integer                  |           | not null | nextval('artist_id_seq'::regclass)
+ gid              | uuid                     |           | not null |
+ name             | character varying        |           | not null |
+ sort_name        | character varying        |           | not null |
+ begin_date_year  | smallint                 |           |          |
+ begin_date_month | smallint                 |           |          |
+ begin_date_day   | smallint                 |           |          |
+ end_date_year    | smallint                 |           |          |
+ end_date_month   | smallint                 |           |          |
+ end_date_day     | smallint                 |           |          |
+ type             | integer                  |           |          |
+ area             | integer                  |           |          |
+ gender           | integer                  |           |          |
+ comment          | character varying(255)   |           | not null | ''::character varying
+ edits_pending    | integer                  |           | not null | 0
+ last_updated     | timestamp with time zone |           |          | now()
+ ended            | boolean                  |           | not null | false
+
+                                         Table "public.release"
+    Column     |           Type           | Collation | Nullable |               Default
+---------------+--------------------------+-----------+----------+-------------------------------------
+ id            | integer                  |           | not null | nextval('release_id_seq'::regclass)
+ gid           | uuid                     |           | not null |
+ name          | character varying        |           | not null |
+ artist_credit | integer                  |           | not null |
+ release_group | integer                  |           | not null |
+ status        | integer                  |           |          |
+ packaging     | integer                  |           |          |
+ language      | integer                  |           |          |
+ script        | integer                  |           |          |
+ barcode       | character varying(255)   |           |          |
+ comment       | character varying(255)   |           | not null | ''::character varying
+ edits_pending | integer                  |           | not null | 0
+ quality       | smallint                 |           | not null | '-1'::integer
+
+
+              Table "public.release_country"
+   Column   |   Type   | Collation | Nullable | Default
+------------+----------+-----------+----------+---------
+ release    | integer  |           | not null |
+ country    | integer  |           | not null |
+ date_year  | smallint |           |          |
+ date_month | smallint |           |          |
+ date_day   | smallint |           |          |
+
+                                         Table "public.release_group"
+    Column     |           Type           | Collation | Nullable |                  Default
+---------------+--------------------------+-----------+----------+-------------------------------------------
+ id            | integer                  |           | not null | nextval('release_group_id_seq'::regclass)
+ gid           | uuid                     |           | not null |
+ name          | character varying        |           | not null |
+ artist_credit | integer                  |           | not null |
+ type          | integer                  |           |          |
+ comment       | character varying(255)   |           | not null | ''::character varying
+ edits_pending | integer                  |           | not null | 0
+
+
+
+ Please my questions about writing SQL queries for the above tables.
+
+```
